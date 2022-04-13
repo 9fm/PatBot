@@ -5,14 +5,14 @@ import { CommandManager } from "./commandManager";
 import { prefix } from "./config"
 import { connect, model, Schema } from "mongoose";
 
-export interface ModuleConfig {
+export interface GuildModuleSettings {
     readonly moduleId: string;
     enabled: boolean;
 }
 
 export interface GuildData {
     readonly guildId: string;
-    modules: ModuleConfig[];
+    modules: GuildModuleSettings[];
 }
 
 const guildSchema = new Schema<GuildData>({
