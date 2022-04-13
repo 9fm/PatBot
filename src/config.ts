@@ -1,6 +1,6 @@
 import { ColorResolvable } from "discord.js";
 
-export const prefix = "mat ";
+export const prefix = "pat ";
 
 export namespace Colors {
     let currentColor = false;
