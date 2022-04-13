@@ -4,6 +4,10 @@ import { includesWord, replaceWord, unpolish } from "../util/text";
 
 import badWords from "./badWords.json";
 
+function includesBadWords(content: string) {
+    return Object.keys(badWords).some(badWord => includesWord(content, badWord) || includesWord(content, unpolish(badWord)))
+}
+
 export const badWordReplacer: BotModule = {
     defaultEnabled: true,
     description: "Zamienia brzydkie słowa na ładne w wiadomościach (np. chuj -> siusiak)",
@@ -12,7 +16,7 @@ export const badWordReplacer: BotModule = {
     async onMessageSent(message: Message<boolean>) {
         const content = message.content.toLowerCase();
 
-        if (Object.keys(badWords).some(badWord => includesWord(content, badWord) || includesWord(content, unpolish(badWord)))) {
+        if (includesBadWords(content)) {
             let contentWithoutBadWords = content;
             Object.entries(badWords)
                 .forEach(([badWord, goodWord]) => {
@@ -25,6 +29,15 @@ export const badWordReplacer: BotModule = {
             const hook = (await channel.fetchWebhooks()).find((webhook) => webhook.name == "Pathook") ?? await channel.createWebhook("Pathook", { reason: "Webhook stworzony przez pat bota do usuwania brzydkich słów z wiadomości" });
             await hook.send({ username: message.author.username, avatarURL: message.author.avatarURL() ?? undefined, content: contentWithoutBadWords })
             await message.delete();
+        }
+    },
+
+    eventListeners: {
+        messageUpdate(oldMessage: Message, newMessage: Message) {
+            if (includesBadWords(newMessage.content)) {
+                newMessage.delete();
+                newMessage.channel.send(`<@${newMessage.author.id}> pat wszystko widzi`);
+            }
         }
     }
 }

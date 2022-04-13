@@ -6,4 +6,5 @@ export interface BotModule {
     requiredPermissions: PermissionString[]
 
     onMessageSent?(message: Message): Promise<void>
+    eventListeners?: Object
 }

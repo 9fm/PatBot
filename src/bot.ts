@@ -40,7 +40,23 @@ export class Bot {
         this.client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES, Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
         this.modules = new Map(Object.entries(modules));
 
+        this.registerModuleCallbacks();
         this.registerCallbacks();
+    }
+
+    private registerModuleCallbacks() {
+        for (const [moduleId, module] of this.modules) {
+            if (module.eventListeners) {
+                for (const [event, listener] of Object.entries(module.eventListeners)) {
+                    this.client.on(event, async (...args: any[]) => {
+                        const guild = args[0].guild;
+                        if (!guild) throw new Error();
+                        if (await this.isModuleEnabled(guild, moduleId) && this.hasModulePermissions(guild, moduleId))
+                            await listener(...args);
+                    });
+                }
+            }
+        }
     }
 
     private registerCallbacks() {
@@ -62,13 +78,17 @@ export class Bot {
                 this.commandManager.executeCommand(message, message.content.slice(mentionPrefix.length));
             }
             else {
-                for (const [moduleId, module] of this.modules) {
-                    if (await this.isModuleEnabled(message.guild!, moduleId) && this.hasModulePermissions(message.guild!, moduleId)) {
-                        module.onMessageSent?.(message).catch((exception) => console.error(exception));
-                    }
-                }
+                this.onAllEnabledModules(message.guild!, (m) => m.onMessageSent?.(message).catch((exception) => console.error(exception)));
             }
         });
+    }
+
+    private async onAllEnabledModules(guild: Discord.Guild, action: (module: BotModule) => void) {
+        for (const [moduleId, module] of this.modules) {
+            if (await this.isModuleEnabled(guild, moduleId) && this.hasModulePermissions(guild, moduleId)) {
+                action(module);
+            }
+        }
     }
 
     public async isModuleEnabled(guild: Discord.Guild, moduleId: string) {
