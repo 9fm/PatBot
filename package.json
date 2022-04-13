@@ -1,0 +1,27 @@
+{
+  "name": "pat-bot",
+  "version": "0.1.0",
+  "description": "Discord bot for my discord server",
+  "scripts": {
+    "start": "ts-node src/main.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ketok4321/PatBot.git"
+  },
+  "author": "Ketok",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ketok4321/PatBot/issues"
+  },
+  "homepage": "https://github.com/Ketok4321/PatBot#readme",
+  "dependencies": {
+    "discord.js": "^13.3.1",
+    "dotenv": "^16.0.0",
+    "moment": "^2.29.2",
+    "mongoose": "^6.2.10"
+  },
+  "devDependencies": {
+    "@tsconfig/node16": "^1.0.2"
+  }
+}
