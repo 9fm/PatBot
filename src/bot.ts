@@ -36,7 +36,7 @@ export class Bot {
 
     public readonly modules: ReadonlyMap<string, BotModule>;
 
-    public constructor(modules: Object) {
+    public constructor(modules: { [key: string]: BotModule }) {
         this.client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES, Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
         this.modules = new Map(Object.entries(modules));
 
@@ -52,7 +52,7 @@ export class Bot {
                         const guild = args[0].guild;
                         if (!guild) throw new Error();
                         if (await this.isModuleEnabled(guild, moduleId) && this.hasModulePermissions(guild, moduleId))
-                            await listener(...args);
+                            await (listener as any)(...args);
                     });
                 }
             }
