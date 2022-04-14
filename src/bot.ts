@@ -16,7 +16,7 @@ export interface GuildData {
 }
 
 const guildSchema = new Schema<GuildData>({
-    guildId: { type: String, required: true },
+    guildId: { type: String, required: true, unique: true },
     modules: {
         type: [{
             moduleId: String,

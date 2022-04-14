@@ -33,10 +33,10 @@ export const badWordReplacer: BotModule = {
     },
 
     eventListeners: {
-        messageUpdate(oldMessage: Message, newMessage: Message) {
-            if (includesBadWords(newMessage.content)) {
+        messageUpdate(oldMessage, newMessage) {
+            if (includesBadWords(newMessage.content!)) {
                 newMessage.delete();
-                newMessage.channel.send(`<@${newMessage.author.id}> pat wszystko widzi`);
+                newMessage.channel.send(`<@${newMessage.author!.id}> pat wszystko widzi`);
             }
         }
     }

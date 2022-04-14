@@ -1,4 +1,4 @@
-import { Message, PermissionString } from "discord.js";
+import { Awaitable, ClientEvents, Message, PermissionString } from "discord.js";
 
 export interface BotModule {
     defaultEnabled: boolean
@@ -6,5 +6,7 @@ export interface BotModule {
     requiredPermissions: PermissionString[]
 
     onMessageSent?(message: Message): Promise<void>
-    eventListeners?: Object
+    eventListeners?: {
+        [K in keyof ClientEvents]?: (...args: ClientEvents[K]) => Awaitable<void>;
+    }
 }
