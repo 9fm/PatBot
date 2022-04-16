@@ -13,7 +13,7 @@ export class CommandManager {
         this.bot = bot;
     }
 
-    public executeCommand(message: Message, commandBody: string) {
+    public async executeCommand(message: Message, commandBody: string) {
         const commandName = commandBody.split(" ")[0];
 
         if (!commandName) return;
@@ -26,7 +26,7 @@ export class CommandManager {
         }
 
         try {
-            command(new CommandContext(this.bot, message, commandBody.slice(commandName.length + 1)));
+            await command(new CommandContext(this.bot, message, commandBody.slice(commandName.length + 1)));
         } catch (exception) {
             const embed = new MessageEmbed()
                 .setTitle("Błąd")

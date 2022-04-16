@@ -72,10 +72,10 @@ export class Bot {
                 message.reply("czego");
             }
             else if (content.startsWith(prefix)) {
-                this.commandManager.executeCommand(message, message.content.slice(prefix.length));
+                await this.commandManager.executeCommand(message, message.content.slice(prefix.length));
             }
             else if (content.startsWith(mentionPrefix)) {
-                this.commandManager.executeCommand(message, message.content.slice(mentionPrefix.length));
+                await this.commandManager.executeCommand(message, message.content.slice(mentionPrefix.length));
             }
             else {
                 this.onAllEnabledModules(message.guild!, (m) => m.onMessageSent?.(message).catch((exception) => console.error(exception)));

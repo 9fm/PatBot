@@ -16,4 +16,4 @@ export class CommandContext {
     }
 }
 
-export type Command = (context: CommandContext) => void;
+export type Command = (context: CommandContext) => Awaitable<void>;
