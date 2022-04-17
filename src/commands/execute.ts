@@ -1,5 +1,4 @@
 import { Command } from "../command";
-import vm from "vm";
 
 export const executeCommand: Command = async (ctx) => {
     if (ctx.message.author.id != "487681102580809728") return ctx.message.reply("tylko ketok moze uzyc takiej poteznej komendy");
