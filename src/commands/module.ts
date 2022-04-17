@@ -1,6 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import { Command } from "../command";
-import { Colors } from "../config";
+import { getColor } from "../colors";
 
 function setEnabledModuleCommand(enabled: boolean): Command {
     return async ({ bot, message, args }) => {
@@ -30,7 +30,7 @@ export const disableModuleCommand = setEnabledModuleCommand(false);
 export const listModulesCommand: Command = async ({ bot, message, args }) => {
     const embed = new MessageEmbed()
         .setTitle("Moduły pata")
-        .setColor(Colors.getColor());
+        .setColor(getColor());
 
     for (const [moduleId, module] of bot.modules) {
         const status = await bot.isModuleEnabled(message.guild!, moduleId) ? (bot.hasModulePermissions(message.guild!, moduleId) ? "wlonczony" : "brakuje permisji") : "wylonczony";

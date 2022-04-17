@@ -2,7 +2,6 @@ import * as Discord from "discord.js";
 import { BotModule } from "./botModule";
 import { Command } from "./command";
 import { CommandManager } from "./commandManager";
-import { prefix } from "./config"
 import { connect, model, Schema } from "mongoose";
 
 export interface GuildModuleSettings {
@@ -32,12 +31,15 @@ export const GuildData = model<GuildData>('GuildData', guildSchema);
 export class Bot {
     public readonly client: Discord.Client;
 
+    public readonly prefix: string;
+
     public readonly commandManager = new CommandManager(this);
 
     public readonly modules: ReadonlyMap<string, BotModule>;
 
-    public constructor(modules: { [key: string]: BotModule }) {
+    public constructor(prefix: string, modules: { [key: string]: BotModule }) {
         this.client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES, Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
+        this.prefix = prefix;
         this.modules = new Map(Object.entries(modules));
 
         this.registerModuleCallbacks();
@@ -66,20 +68,20 @@ export class Bot {
 
             const content = message.content.toLowerCase();
 
-            const mentionPrefix = `<@!${this.client.user!.id}> `;
+            const prefixes = [this.prefix, `<@${this.client.user!.id}> `, `<@!${this.client.user!.id}> `];
 
-            if (content == prefix.trimEnd() || content == mentionPrefix.trimEnd()) {
+            if (prefixes.some((prefix) => content == prefix.trimEnd())) {
                 message.reply("czego");
+                return;
             }
-            else if (content.startsWith(prefix)) {
+
+            const prefix = prefixes.find((prefix) => content.startsWith(prefix))
+            if (prefix) {
                 await this.commandManager.executeCommand(message, message.content.slice(prefix.length));
+                return;
             }
-            else if (content.startsWith(mentionPrefix)) {
-                await this.commandManager.executeCommand(message, message.content.slice(mentionPrefix.length));
-            }
-            else {
-                this.onAllEnabledModules(message.guild!, (m) => m.onMessageSent?.(message).catch((exception) => console.error(exception)));
-            }
+
+            this.onAllEnabledModules(message.guild!, (m) => m.onMessageSent?.(message).catch((exception) => console.error(exception)));
         });
     }
 

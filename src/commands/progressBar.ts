@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import { Colors } from "../config";
+import { getColor } from "../colors";
 import { Command, CommandContext } from "../command";
 import { delay } from "../util/misc";
 import { random } from "../util/random";
@@ -8,7 +8,7 @@ export function progressBarCommand(progressMessage: (ctx: CommandContext) => str
     return async (context) => {
         const embed = new MessageEmbed()
             .setTitle(progressMessage(context))
-            .setColor(Colors.getColor())
+            .setColor(getColor())
             .setDescription("");
 
         let percentage = 0

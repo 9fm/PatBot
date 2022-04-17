@@ -1,7 +1,6 @@
 import * as dotenv from "dotenv";
 
 import { Bot } from "./bot";
-import { prefix } from "./config";
 
 import { hehe } from "./modules/hehe";
 import { badWordReplacer } from "./modules/badWordReplacer";
@@ -20,9 +19,9 @@ import { leakCodeCommand } from "./commands/leakCode";
 
 dotenv.config();
 
-const bot = new Bot({ badWordReplacer, hehe });
+const bot = new Bot(process.env.PREFIX as string, { badWordReplacer, hehe });
 
-bot.addCommand(["pomocy", "pomoc", "help"], replyCommand(`nie pomogę ci :c\n(ale możesz użyć \`${prefix}komendy\` żeby zobaczyć listę komend)`));
+bot.addCommand(["pomocy", "pomoc", "help"], replyCommand(`nie pomogę ci :c\n(ale możesz użyć \`${bot.prefix}komendy\` żeby zobaczyć listę komend)`));
 
 bot.addCommand(["żyjesz", "żyjesz?", "działasz", "działasz?"], replyCommand("tak"));
 bot.addCommand(["pogłaskaj", "pat", "<:pat:708330059437441114>"], replyCommand("Pat został pogłaskany."));

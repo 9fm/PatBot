@@ -1,7 +1,7 @@
 import { Message, MessageEmbed } from "discord.js";
 import { Bot } from "./bot";
 import { Command, CommandContext } from "./command";
-import { Colors } from "./config";
+import { error } from "./colors";
 import { unpolish } from "./util/text";
 
 export class CommandManager {
@@ -31,7 +31,7 @@ export class CommandManager {
             const embed = new MessageEmbed()
                 .setTitle("Błąd")
                 .setDescription("Coś wybuchło :c")
-                .setColor(Colors.error);
+                .setColor(error);
 
             message.channel.send({ embeds: [embed] });
 

@@ -1,5 +1,5 @@
 import { MessageEmbed, User } from "discord.js";
-import { Colors } from "../config";
+import { getColor } from "../colors";
 import { Command } from "../command";
 import { getUserFromMention } from "../util/discord";
 import { random } from "../util/random";
@@ -18,7 +18,7 @@ export const lejCommand: Command = async (context) => {
 
     const embed = new MessageEmbed()
         .setTitle("Lejometr")
-        .setColor(Colors.getColor())
+        .setColor(getColor())
         .setDescription(description);
 
     await context.message.reply({ embeds: [embed] });
