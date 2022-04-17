@@ -38,7 +38,7 @@ bot.addCommand(["usuń"], progressBarCommand((ctx) => `Usuwam ${ctx.unsplittedAr
 bot.addCommand(["komendy", "listakomend"], commandListCommand);
 bot.addCommand(["corobi", "zleakujkod"], leakCodeCommand);
 bot.addCommand(["wykonaj"], executeCommand);
-bot.addCommand(["gdziejesteś"], (ctx) => ctx.message.reply(ctx.bot.client.guilds.cache.map(guild => guild.name).toString()));
+bot.addCommand(["gdziejesteś"], (ctx) => void ctx.message.reply(ctx.bot.client.guilds.cache.map(guild => guild.name).toString()));
 
 bot.addCommand(["moduły"], listModulesCommand);
 bot.addCommand(["włącz"], requiresPermissions(["MANAGE_GUILD"], enableModuleCommand));
