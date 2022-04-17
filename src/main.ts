@@ -11,7 +11,7 @@ import { pingCommand } from "./commands/ping";
 import { lejCommand } from "./commands/lej";
 import { sayCommand } from "./commands/say";
 import { progressBarCommand } from "./commands/progressBar";
-import { executeCommand, safeExecuteCommand } from "./commands/execute";
+import { executeCommand } from "./commands/execute";
 import { commandListCommand } from "./commands/commandList";
 import { randomReplyCommand } from "./commands/randomReply";
 import { requiresPermissions } from "./commands/requiresPermission";
@@ -39,7 +39,6 @@ bot.addCommand(["usuń"], progressBarCommand((ctx) => `Usuwam ${ctx.unsplittedAr
 bot.addCommand(["komendy", "listakomend"], commandListCommand);
 bot.addCommand(["corobi", "zleakujkod"], leakCodeCommand);
 bot.addCommand(["wykonaj"], executeCommand);
-bot.addCommand(["wykonajaleniejestemketokiem"], safeExecuteCommand);
 bot.addCommand(["gdziejesteś"], (ctx) => ctx.message.reply(ctx.bot.client.guilds.cache.map(guild => guild.name).toString()));
 
 bot.addCommand(["moduły"], listModulesCommand);
