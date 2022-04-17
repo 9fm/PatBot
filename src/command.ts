@@ -16,4 +16,4 @@ export class CommandContext {
     }
 }
 
-export type Command = (context: CommandContext) => Awaitable<void>;
+export type Command = (context: CommandContext) => Discord.Awaitable<void>;
