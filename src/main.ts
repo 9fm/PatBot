@@ -14,7 +14,7 @@ import { executeCommand } from "./commands/execute";
 import { commandListCommand } from "./commands/commandList";
 import { randomReplyCommand } from "./commands/randomReply";
 import { requiresPermissions } from "./commands/requiresPermission";
-import { disableModuleCommand, enableModuleCommand, listModulesCommand } from "./commands/module";
+import { disableModuleCommand, enableModuleCommand, getConfigOverridesCommand, listModulesCommand, setConfigOverridesCommand } from "./commands/module";
 import { leakCodeCommand } from "./commands/leakCode";
 
 dotenv.config();
@@ -38,10 +38,11 @@ bot.addCommand(["usuń"], progressBarCommand((ctx) => `Usuwam ${ctx.unsplittedAr
 bot.addCommand(["komendy", "listakomend"], commandListCommand);
 bot.addCommand(["corobi", "zleakujkod"], leakCodeCommand);
 if (process.env.BOT_OWNER_ID) bot.addCommand(["wykonaj"], executeCommand(process.env.BOT_OWNER_ID as string));
-bot.addCommand(["gdziejesteś"], (ctx) => void ctx.message.reply(ctx.bot.client.guilds.cache.map(guild => guild.name).toString()));
 
 bot.addCommand(["moduły"], listModulesCommand);
 bot.addCommand(["włącz"], requiresPermissions(["MANAGE_GUILD"], enableModuleCommand));
 bot.addCommand(["wyłącz"], requiresPermissions(["MANAGE_GUILD"], disableModuleCommand));
+bot.addCommand(["konfiguruj"], requiresPermissions(["MANAGE_GUILD"], setConfigOverridesCommand));
+bot.addCommand(["pokazconfig", "config"], requiresPermissions(["MANAGE_GUILD"], getConfigOverridesCommand));
 
 bot.start(process.env.TOKEN!);

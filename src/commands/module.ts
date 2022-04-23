@@ -1,27 +1,36 @@
-import { MessageEmbed } from "discord.js";
+import { Guild, MessageEmbed } from "discord.js";
 import { Command } from "../command";
 import { getColor } from "../colors";
+import { Bot, GuildData, GuildModuleSettings } from "../bot";
 
-function setEnabledModuleCommand(enabled: boolean): Command {
-    return async ({ bot, message, args }) => {
-        if (!bot.modules.has(args[0])) {
-            await message.reply(`Moduł ${args[0]} nie istnieje`);
+function moduleCommand(command: Command, moduleArgIndex: number = 0): Command {
+    return async (ctx) => {
+        if (!ctx.bot.modules.has(ctx.args[moduleArgIndex])) {
+            await ctx.message.reply(`Moduł ${ctx.args[moduleArgIndex]} nie istnieje`);
             return;
         }
 
-        const guild = await bot.getGuildData(message.guild!);
-
-        let index = guild.modules.findIndex((moduleConf) => moduleConf.moduleId == args[0]);
-        if (index == -1) {
-            guild.modules.push({ moduleId: args[0], enabled });
-        }
-        else {
-            guild.modules[index].enabled = enabled;
-        }
-
-        await guild.save();
-        await message.reply(enabled ? `Moduł \`${args[0]}\` został włączony na tym serwerze` : `Moduł \`${args[0]}\` został wyłączony na tym serwerze`);
+        await command(ctx);
     }
+}
+
+function getModuleSettings(bot: Bot, guildData: GuildData, moduleId: string): [GuildModuleSettings, number] {
+    let index = guildData.modules.findIndex((moduleConf) => moduleConf.moduleId == moduleId);
+    if (index == -1) {
+        index = guildData.modules.push({ moduleId, enabled: bot.modules.get(moduleId)!.defaultEnabled, configOverrides: {} });
+    }
+    return [guildData.modules[index]!, index];
+}
+
+function setEnabledModuleCommand(enabled: boolean): Command {
+    return moduleCommand(async ({ bot, message, args }) => {
+        const guildData = await bot.getGuildData(message.guild!);
+
+        getModuleSettings(bot, guildData, args[0])[0].enabled = enabled;
+
+        await guildData.save();
+        await message.reply(enabled ? `Moduł \`${args[0]}\` został włączony na tym serwerze` : `Moduł \`${args[0]}\` został wyłączony na tym serwerze`);
+    });
 }
 
 export const enableModuleCommand = setEnabledModuleCommand(true);
@@ -39,3 +48,28 @@ export const listModulesCommand: Command = async ({ bot, message, args }) => {
 
     await message.reply({ embeds: [embed] });
 }
+
+export const setConfigOverridesCommand: Command = moduleCommand(async ({ bot, message, unsplittedArgs }) => {
+    const spaceIndex = unsplittedArgs.indexOf(" ");
+    const moduleId = unsplittedArgs.substring(0, spaceIndex);
+    const configOverrides = JSON.parse(unsplittedArgs.substring(spaceIndex + 1));
+
+    const guildData = await bot.getGuildData(message.guild!);
+    const [moduleSettings, index] = getModuleSettings(bot, guildData, moduleId);
+
+    moduleSettings.configOverrides = configOverrides;
+    guildData.markModified(`modules[${index}].configOverrides`);
+
+    guildData.save();
+
+    message.reply("Ustawione :thumbsup:")
+})
+
+export const getConfigOverridesCommand: Command = moduleCommand(async ({ bot, message, args }) => {
+    const moduleId = args[0];
+
+    const guildData = await bot.getGuildData(message.guild!);
+    const [moduleSettings] = getModuleSettings(bot, guildData, moduleId);
+
+    await message.reply("```json\n" + JSON.stringify(moduleSettings.configOverrides) + "```");
+});

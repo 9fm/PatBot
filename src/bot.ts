@@ -7,6 +7,7 @@ import { connect, model, Schema } from "mongoose";
 export interface GuildModuleSettings {
     readonly moduleId: string;
     enabled: boolean;
+    configOverrides: Object;
 }
 
 export interface GuildData {
@@ -19,7 +20,8 @@ const guildSchema = new Schema<GuildData>({
     modules: {
         type: [{
             moduleId: String,
-            enabled: Boolean
+            enabled: Boolean,
+            configOverrides: Schema.Types.Mixed,
         }],
         required: true
     }
@@ -54,7 +56,7 @@ export class Bot {
                         const guild = args[0].guild;
                         if (!guild) throw new Error();
                         if (await this.isModuleEnabled(guild, moduleId) && this.hasModulePermissions(guild, moduleId))
-                            await (listener as any)(...args);
+                            await (listener as any)(this, ...args);
                     });
                 }
             }
@@ -81,7 +83,7 @@ export class Bot {
                 return;
             }
 
-            this.onAllEnabledModules(message.guild!, (m) => m.onMessageSent?.(message).catch((exception) => console.error(exception)));
+            this.onAllEnabledModules(message.guild!, (m) => m.onMessageSent?.(this, message).catch((exception) => console.error(exception)));
         });
     }
 
@@ -114,6 +116,23 @@ export class Bot {
         }
 
         return guildData;
+    }
+
+    public async getConfigOverrides(guild: Discord.Guild, moduleId: string) {
+        const guildData = await this.getGuildData(guild);
+        const moduleSettings = guildData.modules.find((moduleSettings) => moduleSettings.moduleId == moduleId);
+        if (moduleSettings) return moduleSettings.configOverrides;
+        return {};
+    }
+
+    public async getConfig(guild: Discord.Guild, module: string | BotModule): Promise<any> {
+        const moduleId = typeof module == "string" ? module : [...this.modules].find(([key, val]) => val == module)![0];
+        const moduleObj = typeof module == "string" ? this.modules.get(moduleId) : module;
+
+        const config = {};
+        Object.assign(config, moduleObj!.defaultConfig);
+        Object.assign(config, await this.getConfigOverrides(guild, moduleId));
+        return config;
     }
 
     public async start(token: string) {

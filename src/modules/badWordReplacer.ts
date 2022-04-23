@@ -1,27 +1,45 @@
-import { Message, TextChannel } from "discord.js";
+import { Guild, Message, TextChannel } from "discord.js";
+import { Bot } from "../bot";
 import { BotModule } from "../botModule";
 import { includesWord, replaceWord, unpolish } from "../util/text";
 
 import badWords from "./badWords.json";
 
-function includesBadWords(content: string) {
-    return Object.keys(badWords).some(badWord => includesWord(content, badWord) || includesWord(content, unpolish(badWord)))
+async function getBadWordMap(bot: Bot, guild: Guild) {
+    const badWordMap = {};
+
+    const config = await bot.getConfig(guild, badWordReplacer);
+
+    if (config.useGlobalBadWordMap) Object.assign(badWordMap, badWords);
+    Object.assign(badWordMap, config.customBadWordMap);
+
+    return badWordMap;
+}
+
+function includesBadWords(content: string, badWordMap: any) {
+    return Object.keys(badWordMap).some(badWord => includesWord(content, badWord) || includesWord(content, unpolish(badWord)))
 }
 
 export const badWordReplacer: BotModule = {
     defaultEnabled: true,
     description: "Zamienia brzydkie słowa na ładne w wiadomościach (np. chuj -> siusiak)",
     requiredPermissions: ["MANAGE_WEBHOOKS", "MANAGE_MESSAGES"],
+    defaultConfig: {
+        useGlobalBadWordMap: true,
+        customBadWordMap: {}
+    },
 
-    async onMessageSent(message: Message<boolean>) {
+    async onMessageSent(bot: Bot, message: Message<boolean>) {
         const content = message.content.toLowerCase();
 
-        if (includesBadWords(content)) {
+        const badWordMap = await getBadWordMap(bot, message.guild!)
+
+        if (includesBadWords(content, badWordMap)) {
             let contentWithoutBadWords = content;
-            Object.entries(badWords)
+            Object.entries(badWordMap)
                 .forEach(([badWord, goodWord]) => {
-                    contentWithoutBadWords = replaceWord(contentWithoutBadWords, badWord, goodWord);
-                    contentWithoutBadWords = replaceWord(contentWithoutBadWords, unpolish(badWord), unpolish(goodWord));
+                    contentWithoutBadWords = replaceWord(contentWithoutBadWords, badWord, goodWord as string);
+                    contentWithoutBadWords = replaceWord(contentWithoutBadWords, unpolish(badWord), unpolish(goodWord as string));
                 });
 
             const channel = message.channel as TextChannel;
@@ -33,8 +51,8 @@ export const badWordReplacer: BotModule = {
     },
 
     eventListeners: {
-        messageUpdate(oldMessage, newMessage) {
-            if (includesBadWords(newMessage.content!)) {
+        messageUpdate(bot, oldMessage, newMessage) {
+            if (includesBadWords(newMessage.content!, getBadWordMap(bot, oldMessage.guild!))) {
                 newMessage.delete();
                 newMessage.channel.send(`<@${newMessage.author!.id}> pat wszystko widzi`);
             }

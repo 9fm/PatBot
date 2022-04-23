@@ -1,4 +1,5 @@
 import { Message } from "discord.js";
+import { Bot } from "../bot";
 import { BotModule } from "../botModule";
 
 export const hehe: BotModule = {
@@ -6,7 +7,7 @@ export const hehe: BotModule = {
     description: "Odpisuje hehe na śmieszne słowa (sex)",
     requiredPermissions: ["SEND_MESSAGES"],
 
-    async onMessageSent(message: Message<boolean>) {
+    async onMessageSent(bot: Bot, message: Message<boolean>) {
         const content = message.content.toLowerCase();
 
         if (content.includes("sex")) message.reply("hehe");
