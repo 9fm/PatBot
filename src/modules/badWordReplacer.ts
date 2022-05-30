@@ -1,11 +1,12 @@
 import { Guild, Message, TextChannel } from "discord.js";
 import { Bot } from "../bot";
 import { BotModule } from "../botModule";
+import { Dict } from "../util/misc";
 import { includesWord, replaceWord, unpolish } from "../util/text";
 
 import badWords from "./badWords.json";
 
-async function getBadWordMap(bot: Bot, guild: Guild) {
+async function getBadWordMap(bot: Bot, guild: Guild): Promise<Dict<string>> {
     const badWordMap = {};
 
     const config = await bot.getConfig(guild, badWordReplacer);
@@ -13,10 +14,10 @@ async function getBadWordMap(bot: Bot, guild: Guild) {
     if (config.useGlobalBadWordMap) Object.assign(badWordMap, badWords);
     Object.assign(badWordMap, config.customBadWordMap);
 
-    return badWordMap;
+    return badWordMap as Dict<string>;
 }
 
-function includesBadWords(content: string, badWordMap: any) {
+function includesBadWords(content: string, badWordMap: Dict<string>) {
     return Object.keys(badWordMap).some(badWord => includesWord(content, badWord) || includesWord(content, unpolish(badWord)))
 }
 
@@ -51,8 +52,8 @@ export const badWordReplacer: BotModule = {
     },
 
     eventListeners: {
-        messageUpdate(bot, oldMessage, newMessage) {
-            if (includesBadWords(newMessage.content!, getBadWordMap(bot, oldMessage.guild!))) {
+        async messageUpdate(bot, oldMessage, newMessage) {
+            if (includesBadWords(newMessage.content!, await getBadWordMap(bot, oldMessage.guild!))) {
                 newMessage.delete();
                 newMessage.channel.send(`<@${newMessage.author!.id}> pat wszystko widzi`);
             }
