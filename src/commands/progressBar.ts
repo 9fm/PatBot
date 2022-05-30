@@ -1,10 +1,10 @@
 import { MessageEmbed } from "discord.js";
-import { getColor } from "../colors";
+import { error, getColor } from "../colors";
 import { Command, CommandContext } from "../command";
 import { delay } from "../util/misc";
 import { random } from "../util/random";
 
-export function progressBarCommand(progressMessage: (ctx: CommandContext) => string, finishedMessage: (ctx: CommandContext) => string): Command {
+export function progressBarCommand(progressMessage: (ctx: CommandContext) => string, finishedMessage: (ctx: CommandContext) => string, failedMessage: (ctx: CommandContext) => string): Command {
     return async (context) => {
         const embed = new MessageEmbed()
             .setTitle(progressMessage(context))
@@ -25,6 +25,13 @@ export function progressBarCommand(progressMessage: (ctx: CommandContext) => str
             await delay(random.range(500, 600));
         }
 
-        await context.message.reply(finishedMessage(context));
+        const failed = random.chance(0.1);
+
+        const resultEmbed = new MessageEmbed()
+            .setTitle(!failed ? finishedMessage(context) : failedMessage(context))
+            .setColor(!failed ? getColor() : error)
+            .setDescription("");
+
+        await context.message.reply({ embeds: [resultEmbed] });
     }
 }

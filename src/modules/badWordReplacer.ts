@@ -6,7 +6,7 @@ import { includesWord, replaceWord, unpolish } from "../util/text";
 
 import badWords from "./badWords.json";
 
-async function getBadWordMap(bot: Bot, guild: Guild): Promise<Dict<string>> {
+async function getBadWordMap(bot: Bot, guild: Guild): Promise<Record<string, string>> {
     const badWordMap = {};
 
     const config = await bot.getConfig(guild, badWordReplacer);
@@ -17,7 +17,7 @@ async function getBadWordMap(bot: Bot, guild: Guild): Promise<Dict<string>> {
     return badWordMap as Dict<string>;
 }
 
-function includesBadWords(content: string, badWordMap: Dict<string>) {
+function includesBadWords(content: string, badWordMap: Record<string, string>) {
     return Object.keys(badWordMap).some(badWord => includesWord(content, badWord) || includesWord(content, unpolish(badWord)))
 }
 

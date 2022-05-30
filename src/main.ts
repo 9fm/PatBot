@@ -32,8 +32,8 @@ bot.addCommand(["czy", "<:czy:767692365439565844>"], randomReplyCommand("tak", "
 bot.addCommand(["lej", "lejometr", "<:lejoglowie:950000150447804436>"], lejCommand);
 bot.addCommand(["powiedz"], sayCommand);
 
-bot.addCommand(["zrób"], progressBarCommand((ctx) => `Robię ${ctx.unsplittedArgs}...`, (ctx) => `Zrobione!`));
-bot.addCommand(["usuń"], progressBarCommand((ctx) => `Usuwam ${ctx.unsplittedArgs}...`, (ctx) => `Usunięte!`))
+bot.addCommand(["zrób"], progressBarCommand((ctx) => `Robię ${ctx.unsplittedArgs}...`, (ctx) => `Zrobiono ${ctx.unsplittedArgs}!`, (ctx) => `Błąd! Zrobienie ${ctx.unsplittedArgs} nie zakończyło się pomyślnie`));
+bot.addCommand(["usuń"], progressBarCommand((ctx) => `Usuwam ${ctx.unsplittedArgs}...`, (ctx) => `Usunięto ${ctx.unsplittedArgs}!`, (ctx) => `Błąd! Usunięcie ${ctx.unsplittedArgs} nie zakończyło się pomyślnie`));
 
 bot.addCommand(["komendy", "listakomend"], commandListCommand);
 bot.addCommand(["corobi", "zleakujkod"], leakCodeCommand);
