@@ -7,7 +7,7 @@ export const commandListCommand: Command = async (ctx) => {
         .setTitle("Komendy")
         .setColor(getColor());
 
-    for (const cmd of ctx.bot.commandManager.commands) {
+    for (const cmd of ctx.bot.commandHandler.commands) {
         embed.addField(cmd[0].map((el, i) => i == 0 ? `**${el}**` : el).join(", "), `Jeżeli chcesz sie dowiedzieć co robi napisz \`${ctx.bot.prefix}corobi ${cmd[0][0]}\``);
     }
 
