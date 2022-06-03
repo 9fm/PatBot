@@ -1,7 +1,6 @@
 import { Guild, Message, TextChannel } from "discord.js";
 import { Bot } from "../bot";
 import { BotModule } from "../botModule";
-import { Dict } from "../util/misc";
 import { includesWord, replaceWord, unpolish } from "../util/text";
 
 import badWords from "./badWords.json";
@@ -14,7 +13,7 @@ async function getBadWordMap(bot: Bot, guild: Guild): Promise<Record<string, str
     if (config.useGlobalBadWordMap) Object.assign(badWordMap, badWords);
     Object.assign(badWordMap, config.customBadWordMap);
 
-    return badWordMap as Dict<string>;
+    return badWordMap as Record<string, string>;
 }
 
 function includesBadWords(content: string, badWordMap: Record<string, string>) {
