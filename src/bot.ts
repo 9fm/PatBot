@@ -1,8 +1,9 @@
 import * as Discord from "discord.js";
 import { BotModule } from "./botModule";
 import { Command } from "./command";
-import { CommandManager } from "./commandManager";
+import { CommandHandler } from "./commandHandler";
 import { connect, model, Schema } from "mongoose";
+import { error } from "./colors";
 
 export interface GuildModuleSettings {
     readonly moduleId: string;
@@ -35,7 +36,7 @@ export class Bot {
 
     public readonly prefix: string;
 
-    public readonly commandManager = new CommandManager(this);
+    public readonly commandHandler = new CommandHandler();
 
     public readonly modules: ReadonlyMap<string, BotModule>;
 
@@ -79,7 +80,19 @@ export class Bot {
 
             const prefix = prefixes.find((prefix) => content.startsWith(prefix))
             if (prefix) {
-                await this.commandManager.executeCommand(message, message.content.slice(prefix.length));
+                try {
+                    const result = await this.commandHandler.handleCommand(this, message, message.content.slice(prefix.length));
+                    if (!result) message.reply("Nie ma takiej komendy :c");
+                } catch (exception) {
+                    const embed = new Discord.MessageEmbed()
+                        .setTitle("Błąd")
+                        .setDescription("Coś wybuchło :c")
+                        .setColor(error);
+
+                    message.channel.send({ embeds: [embed] });
+
+                    console.error(exception);
+                }
                 return;
             }
 
@@ -106,7 +119,7 @@ export class Bot {
     }
 
     public addCommand(names: string[], command: Command) {
-        return this.commandManager.addCommand(names, command);
+        return this.commandHandler.addCommand(names, command);
     }
 
     public async getGuildData(guild: Discord.Guild) {
