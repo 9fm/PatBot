@@ -6,7 +6,7 @@ import { unpolish } from "./util/text";
 export type CommandsMap = [string[], Command][];
 
 export class CommandHandler {
-    public readonly commands: CommandsMap;
+    public commands: CommandsMap;
 
     public constructor(...commands: CommandsMap) {
         this.commands = commands;

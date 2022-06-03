@@ -118,10 +118,6 @@ export class Bot {
         return guild.members.cache.get(this.client.user!.id)!.permissions.has(this.modules.get(moduleId)!.requiredPermissions);
     }
 
-    public addCommand(names: string[], command: Command) {
-        return this.commandHandler.addCommand(names, command);
-    }
-
     public async getGuildData(guild: Discord.Guild) {
         let guildData = await GuildData.findOne({ guildId: guild.id });
         if (!guildData) {
