@@ -1,4 +1,4 @@
-import { Guild, MessageEmbed } from "discord.js";
+import { MessageEmbed } from "discord.js";
 import { Command } from "../command";
 import { getColor } from "../colors";
 import { Bot, GuildData, GuildModuleSettings } from "../bot";

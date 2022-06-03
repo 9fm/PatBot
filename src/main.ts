@@ -2,7 +2,6 @@ import * as dotenv from "dotenv";
 
 import { Bot } from "./bot";
 
-import { hehe } from "./modules/hehe";
 import { badWordReplacer } from "./modules/badWordReplacer";
 
 import { replyCommand } from "./commands/reply";
@@ -16,12 +15,11 @@ import { randomReplyCommand } from "./commands/randomReply";
 import { requiresPermissions } from "./commands/requiresPermission";
 import { disableModuleCommand, enableModuleCommand, getConfigOverridesCommand, listModulesCommand, setConfigOverridesCommand } from "./commands/module";
 import { leakCodeCommand } from "./commands/leakCode";
-import { CommandHandler } from "./commandHandler";
 import { groupCommand } from "./commands/groupCommand";
 
 dotenv.config();
 
-const bot = new Bot(process.env.PREFIX as string, { badWordReplacer, hehe });
+const bot = new Bot(process.env.PREFIX as string, { badWordReplacer });
 
 bot.addCommand(["pomocy", "pomoc", "help"], replyCommand(`nie pomogę ci :c\n(ale możesz użyć \`${bot.prefix}komendy\` żeby zobaczyć listę komend)`));
 
