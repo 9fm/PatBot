@@ -1,10 +1,10 @@
 import { Command } from "../command";
 
 export function pingCommand(replyMessage: string): Command {
-    return async (context) => {
-        const mess = await context.message.reply(replyMessage);
+    return async (ctx) => {
+        const mess = await ctx.message.reply(replyMessage);
 
-        const ping = mess.createdTimestamp - context.message.createdTimestamp;
+        const ping = mess.createdTimestamp - ctx.message.createdTimestamp;
 
         mess.edit(`${replyMessage} (${ping}ms)`);
     }

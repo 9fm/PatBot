@@ -4,14 +4,13 @@ import { Bot } from "./bot";
 
 import { badWordReplacer } from "./modules/badWordReplacer";
 
-import { replyCommand } from "./commands/reply";
+import { replyCommand, randomReplyCommand } from "./commands/reply";
 import { pingCommand } from "./commands/ping";
 import { lejCommand } from "./commands/lej";
 import { sayCommand } from "./commands/say";
 import { progressBarCommand } from "./commands/progressBar";
 import { executeCommand } from "./commands/execute";
 import { commandListCommand } from "./commands/commandList";
-import { randomReplyCommand } from "./commands/randomReply";
 import { requiresPermissions } from "./commands/requiresPermission";
 import { disableModuleCommand, enableModuleCommand, getConfigOverridesCommand, listModulesCommand, setConfigOverridesCommand } from "./commands/module";
 import { leakCodeCommand } from "./commands/leakCode";
