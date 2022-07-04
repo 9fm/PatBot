@@ -12,7 +12,7 @@ export class CommandContext {
         this.bot = bot;
         this.message = message;
         this.unsplittedArgs = unsplittedArgs;
-        this.args = unsplittedArgs.split(' ');
+        this.args = unsplittedArgs.split(' ').filter(arg => arg != '');
     }
 }
 
