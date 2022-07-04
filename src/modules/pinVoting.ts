@@ -1,7 +1,7 @@
 import { TextChannel } from "discord.js";
 import { BotModule } from "../botModule";
 
-export const pinVoting: BotModule = {
+export const pinVoting: BotModule<{ votesRequired: number }> = {
     defaultEnabled: false,
     description: "Automatycznie przypina wiadomości z wystarczająca liczbą reakcji :pushpin:",
     requiredPermissions: ["MANAGE_MESSAGES"],

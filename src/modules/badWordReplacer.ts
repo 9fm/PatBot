@@ -20,7 +20,7 @@ function includesBadWords(content: string, badWordMap: Record<string, string>) {
     return Object.keys(badWordMap).some(badWord => includesWord(content, badWord) || includesWord(content, unpolish(badWord)))
 }
 
-export const badWordReplacer: BotModule = {
+export const badWordReplacer: BotModule<{ useGlobalBadWordMap: boolean, customBadWordMap: Record<string, string> }> = {
     defaultEnabled: true,
     description: "Zamienia brzydkie słowa na ładne w wiadomościach (np. chuj -> siusiak)",
     requiredPermissions: ["MANAGE_WEBHOOKS", "MANAGE_MESSAGES"],

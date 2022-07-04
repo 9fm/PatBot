@@ -38,9 +38,9 @@ export class Bot {
 
     public readonly commandHandler = new CommandHandler();
 
-    public readonly modules: ReadonlyMap<string, BotModule>;
+    public readonly modules: ReadonlyMap<string, BotModule<any>>;
 
-    public constructor(prefix: string, modules: { [key: string]: BotModule }) {
+    public constructor(prefix: string, modules: { [key: string]: BotModule<any> }) {
         this.client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES, Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
         this.prefix = prefix;
         this.modules = new Map(Object.entries(modules));
@@ -102,7 +102,7 @@ export class Bot {
         });
     }
 
-    private async onAllEnabledModules(guild: Discord.Guild, action: (module: BotModule) => void) {
+    private async onAllEnabledModules(guild: Discord.Guild, action: (module: BotModule<any>) => void) {
         for (const [moduleId, module] of this.modules) {
             if (await this.isModuleEnabled(guild, moduleId) && this.hasModulePermissions(guild, moduleId)) {
                 action(module);
@@ -136,14 +136,14 @@ export class Bot {
         return {};
     }
 
-    public async getConfig(guild: Discord.Guild, module: string | BotModule): Promise<any> {
+    public async getConfig<C>(guild: Discord.Guild, module: string | BotModule<C>) {
         const moduleId = typeof module == "string" ? module : [...this.modules].find(([key, val]) => val == module)![0];
         const moduleObj = typeof module == "string" ? this.modules.get(moduleId) : module;
 
         const config = {};
         Object.assign(config, moduleObj!.defaultConfig);
         Object.assign(config, await this.getConfigOverrides(guild, moduleId));
-        return config;
+        return config as C;
     }
 
     public async start(token: string) {
