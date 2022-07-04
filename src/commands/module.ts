@@ -17,7 +17,7 @@ function moduleCommand(command: Command, moduleArgIndex: number = 0): Command {
 function getModuleSettings(bot: Bot, guildData: GuildData, moduleId: string): [GuildModuleSettings, number] {
     let index = guildData.modules.findIndex((moduleConf) => moduleConf.moduleId == moduleId);
     if (index == -1) {
-        index = guildData.modules.push({ moduleId, enabled: bot.modules.get(moduleId)!.defaultEnabled, configOverrides: {} });
+        index = guildData.modules.push({ moduleId, enabled: bot.modules.get(moduleId)!.defaultEnabled, configOverrides: {} }) - 1;
     }
     return [guildData.modules[index]!, index];
 }

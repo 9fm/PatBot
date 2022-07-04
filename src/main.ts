@@ -3,6 +3,7 @@ import * as dotenv from "dotenv";
 import { Bot } from "./bot";
 
 import { badWordReplacer } from "./modules/badWordReplacer";
+import { pinVoting } from "./modules/pinVoting";
 
 import { replyCommand, randomReplyCommand } from "./commands/reply";
 import { pingCommand } from "./commands/ping";
@@ -18,7 +19,7 @@ import { groupCommand } from "./commands/groupCommand";
 
 dotenv.config();
 
-const bot = new Bot(process.env.PREFIX as string, { badWordReplacer });
+const bot = new Bot(process.env.PREFIX as string, { badWordReplacer, pinVoting });
 
 bot.commandHandler.commands = [
     [["pomocy", "pomoc", "help"], replyCommand(`nie pomogę ci :c\n(ale możesz użyć \`${bot.prefix}komendy\` żeby zobaczyć listę komend)`)],

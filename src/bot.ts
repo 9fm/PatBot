@@ -54,10 +54,12 @@ export class Bot {
             if (module.eventListeners) {
                 for (const [event, listener] of Object.entries(module.eventListeners)) {
                     this.client.on(event, async (...args: any[]) => {
-                        const guild = args[0].guild;
+                        const guild: Discord.Guild = args[0].guild ?? args[0].message?.guild;
                         if (!guild) throw new Error();
-                        if (await this.isModuleEnabled(guild, moduleId) && this.hasModulePermissions(guild, moduleId))
+                        if (await this.isModuleEnabled(guild, moduleId) && this.hasModulePermissions(guild, moduleId)) {
+                            console.log(`Sending ${event} from ${guild.name} to ${moduleId}`);
                             await (listener as any)(this, ...args);
+                        }
                     });
                 }
             }
