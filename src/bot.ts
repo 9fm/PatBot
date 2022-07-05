@@ -1,6 +1,5 @@
 import * as Discord from "discord.js";
 import { BotModule } from "./botModule";
-import { Command } from "./command";
 import { CommandHandler } from "./commandHandler";
 import { connect, model, Schema } from "mongoose";
 import { error } from "./colors";
@@ -84,7 +83,7 @@ export class Bot {
             if (prefix) {
                 try {
                     const result = await this.commandHandler.handleCommand(this, message, message.content.slice(prefix.length));
-                    if (!result) message.reply("Nie ma takiej komendy :c");
+                    if (result != null) message.reply(result);
                 } catch (exception) {
                     const embed = new Discord.MessageEmbed()
                         .setTitle("Błąd")

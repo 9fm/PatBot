@@ -1,16 +1,18 @@
 import { MessageEmbed } from "discord.js";
 import { getColor } from "../colors";
-import { Command } from "../command";
+import { CommandBuilder, restOfTheLineParser } from "../command";
 
-export const sayCommand: Command = async (ctx) => {
-    const embed = new MessageEmbed()
-        .setTitle(ctx.unsplittedArgs ? `${ctx.message.author.username} kazał mi to powiedzieć` : `${ctx.message.author.username} kazał mi nic nie mówić`)
-        .setAuthor({
-            name: ctx.message.author.username + "#" + ctx.message.author.discriminator,
-            iconURL: ctx.message.author.avatarURL() ?? undefined
-        })
-        .setColor(getColor())
-        .setDescription(ctx.unsplittedArgs);
+export const sayCommand = new CommandBuilder()
+    .withArg("cos", restOfTheLineParser)
+    .executes(async (ctx, cos) => {
+        const embed = new MessageEmbed()
+            .setTitle(cos ? `${ctx.message.author.username} kazał mi to powiedzieć` : `${ctx.message.author.username} kazał mi nic nie mówić`)
+            .setAuthor({
+                name: ctx.message.author.username + "#" + ctx.message.author.discriminator,
+                iconURL: ctx.message.author.avatarURL() ?? undefined
+            })
+            .setColor(getColor())
+            .setDescription(cos);
 
-    await ctx.message.channel.send({ embeds: [embed] });
-}
+        await ctx.message.channel.send({ embeds: [embed] });
+    });

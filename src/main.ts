@@ -12,14 +12,13 @@ import { sayCommand } from "./commands/say";
 import { progressBarCommand } from "./commands/progressBar";
 import { executeCommand } from "./commands/execute";
 import { commandListCommand } from "./commands/commandList";
-import { requiresPermissions } from "./commands/requiresPermission";
 import { disableModuleCommand, enableModuleCommand, getConfigOverridesCommand, listModulesCommand, setConfigOverridesCommand } from "./commands/module";
 import { leakCodeCommand } from "./commands/leakCode";
 import { groupCommand } from "./commands/groupCommand";
 
 dotenv.config();
 
-const bot = new Bot(process.env.PREFIX as string, { badWordReplacer, pinVoting });
+export const bot = new Bot(process.env.PREFIX as string, { badWordReplacer, pinVoting });
 
 bot.commandHandler.commands = [
     [["pomocy", "pomoc", "help"], replyCommand(`nie pomogę ci :c\n(ale możesz użyć \`${bot.prefix}komendy\` żeby zobaczyć listę komend)`)],
@@ -39,7 +38,7 @@ bot.commandHandler.commands = [
     [["komendy", "listakomend"], commandListCommand],
     [["corobi", "zleakujkod"], leakCodeCommand],
 
-    [["moduły"], requiresPermissions(["MANAGE_GUILD"], groupCommand(
+    [["moduły"], groupCommand(
         [["lista"], listModulesCommand],
         [["włącz"], enableModuleCommand],
         [["wyłącz"], disableModuleCommand],
@@ -47,7 +46,7 @@ bot.commandHandler.commands = [
             [["ustaw"], setConfigOverridesCommand],
             [["pokaż"], getConfigOverridesCommand],
         )]
-    ))],
+    )],
 ];
 
 if (process.env.BOT_OWNER_ID) bot.commandHandler.addCommand(["wykonaj"], executeCommand(process.env.BOT_OWNER_ID as string));
