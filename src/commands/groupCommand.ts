@@ -7,7 +7,7 @@ export function groupCommand(...subcommands: CommandsMap) {
         .executes(async (ctx) => {
             const result = await commandHandler.handleCommand(ctx.bot, ctx.message, ctx.unsplittedArgs);
             if (result != null) {
-                if (ctx.args.length == 0) {
+                if (ctx.unsplittedArgs == "") {
                     await ctx.message.reply("Lista subkomend:\n" + commandHandler.commands.map(([name]) => name).join("\n"));
                 }
                 else {

@@ -10,10 +10,6 @@ export interface CommandContext {
     /**
      * @deprecated
      */
-    readonly args: string[];
-    /**
-     * @deprecated
-     */
     readonly unsplittedArgs: string;
 }
 

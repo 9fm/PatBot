@@ -34,12 +34,7 @@ export class CommandHandler {
             return parsedArgs.error;
         }
 
-        command.execute({
-            bot,
-            message,
-            unsplittedArgs,
-            args: unsplittedArgs.split(' ').filter(arg => arg != '')
-        }, ...parsedArgs);
+        command.execute({ bot, message, unsplittedArgs }, ...parsedArgs);
 
         return null;
     }
