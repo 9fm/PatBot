@@ -11,7 +11,7 @@ function getModuleSettings(bot: Bot, guildData: GuildData, moduleId: string): [G
     return [guildData.modules[index]!, index];
 }
 
-function setEnabledModuleCommand(enabled: boolean) {
+export function setEnabledModuleCommand(enabled: boolean) {
     return new CommandBuilder()
         .withArg("moduleId", moduleParser)
         .requires("MANAGE_GUILD")
@@ -24,9 +24,6 @@ function setEnabledModuleCommand(enabled: boolean) {
             await message.reply(enabled ? `Moduł \`${moduleId}\` został włączony na tym serwerze` : `Moduł \`${moduleId}\` został wyłączony na tym serwerze`);
         });
 }
-
-export const enableModuleCommand = setEnabledModuleCommand(true);
-export const disableModuleCommand = setEnabledModuleCommand(false);
 
 export const listModulesCommand = new CommandBuilder()
     .executes(async ({ bot, message }) => {

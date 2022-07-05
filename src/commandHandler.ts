@@ -45,7 +45,9 @@ export class CommandHandler {
     }
 
     private async parseArgs<T extends any[]>(unsplittedArgs: string, parsers: ParserList<T>): Promise<T | ParsingError> {
-        if (parsers.length == 0) return [] as unknown as T;
+        if (parsers.length == 0) {
+            return unsplittedArgs == "" ? [] as unknown as T : { error: "Ta komenda nie przyjmuje argumentów" };
+        }
 
         const result: any[] = [];
 

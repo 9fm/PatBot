@@ -12,7 +12,7 @@ import { sayCommand } from "./commands/say";
 import { progressBarCommand } from "./commands/progressBar";
 import { executeCommand } from "./commands/execute";
 import { commandListCommand } from "./commands/commandList";
-import { disableModuleCommand, enableModuleCommand, getConfigOverridesCommand, listModulesCommand, setConfigOverridesCommand } from "./commands/module";
+import { setEnabledModuleCommand, getConfigOverridesCommand, listModulesCommand, setConfigOverridesCommand } from "./commands/module";
 import { leakCodeCommand } from "./commands/leakCode";
 import { groupCommand } from "./commands/groupCommand";
 
@@ -26,22 +26,22 @@ bot.commandHandler.commands = [
     [["żyjesz", "żyjesz?", "działasz", "działasz?"], replyCommand("tak")],
     [["pogłaskaj", "pat", "<:pat:708330059437441114>"], replyCommand("Pat został pogłaskany.")],
     [["ring", "ping"], pingCommand("Bing!")],
-    [["kiedy", "<:kiedy:741288559604138005>"], randomReplyCommand(":jutro:", ":nigdy:")],
-    [["czy", "<:czy:767692365439565844>"], randomReplyCommand("tak", "nie")],
+    [["kiedy", "<:kiedy:741288559604138005>"], randomReplyCommand([":jutro:", ":nigdy:"], true)],
+    [["czy", "<:czy:767692365439565844>"], randomReplyCommand(["tak", "nie"], true)],
 
-    [["lej", "lejometr", "<:lejoglowie:950000150447804436>"], lejCommand],
+    [["lej", "lejometr"], lejCommand],
     [["powiedz"], sayCommand],
 
-    [["zrób"], progressBarCommand((ctx) => `Robię ${ctx.unsplittedArgs}...`, (ctx) => `Zrobiono ${ctx.unsplittedArgs}!`, (ctx) => `Błąd! Zrobienie ${ctx.unsplittedArgs} nie zakończyło się pomyślnie`)],
-    [["usuń"], progressBarCommand((ctx) => `Usuwam ${ctx.unsplittedArgs}...`, (ctx) => `Usunięto ${ctx.unsplittedArgs}!`, (ctx) => `Błąd! Usunięcie ${ctx.unsplittedArgs} nie zakończyło się pomyślnie`)],
+    [["zrób"], progressBarCommand("Robię {text}...", "Zrobiono {text}!", "Błąd! Zrobienie {text} nie zakończyło się pomyślnie")],
+    [["usuń"], progressBarCommand("Usuwam {text}...", "Usunięto {text}!", "Błąd! Usunięcie {text} nie zakończyło się pomyślnie")],
 
     [["komendy", "listakomend"], commandListCommand],
     [["corobi", "zleakujkod"], leakCodeCommand],
 
     [["moduły"], groupCommand(
         [["lista"], listModulesCommand],
-        [["włącz"], enableModuleCommand],
-        [["wyłącz"], disableModuleCommand],
+        [["włącz"], setEnabledModuleCommand(true)],
+        [["wyłącz"], setEnabledModuleCommand(false)],
         [["config", "konfig"], groupCommand(
             [["ustaw"], setConfigOverridesCommand],
             [["pokaż"], getConfigOverridesCommand],
