@@ -3,7 +3,7 @@ import { getColor } from "../colors";
 import { CommandBuilder, restOfTheLineParser } from "../command";
 
 export const sayCommand = new CommandBuilder()
-    .withArg("cos", restOfTheLineParser)
+    .withArg("coś", restOfTheLineParser)
     .executes(async (ctx, cos) => {
         const embed = new MessageEmbed()
             .setTitle(cos ? `${ctx.message.author.username} kazał mi to powiedzieć` : `${ctx.message.author.username} kazał mi nic nie mówić`)

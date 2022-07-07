@@ -3,7 +3,7 @@ import { Bot } from "./bot";
 import { Command, ParserList, ParsingError, restOfTheLineParser } from "./command";
 import { unpolish } from "./util/text";
 
-export type CommandsMap = [string[], Command][];
+export type CommandsMap = [string[], Command | CommandsMap][];
 
 export class CommandHandler {
     public commands: CommandsMap;
@@ -13,10 +13,10 @@ export class CommandHandler {
     }
 
     public async handleCommand(bot: Bot, message: Message, commandBody: string): Promise<string | null> {
-        const commandName = commandBody.split(" ")[0];
-        if (!commandName) return "aha nawet nie wpisałeś komendy";
+        // const commandName = splittedCommand[0];
+        // if (!commandName) return "aha nawet nie wpisałeś komendy";
 
-        const command = this.getCommand(commandName);
+        const [command, unsplittedArgs] = this.getCommand(commandBody) ?? [null, null];
 
         if (!command) {
             return "Taka komenda nie istnieje";
@@ -25,8 +25,6 @@ export class CommandHandler {
         if (!message.member!.permissions.has(command.permissions)) {
             return "Nie możesz tego dokonać";
         }
-
-        const unsplittedArgs = commandBody.slice(commandName.length + 1);
 
         const parsedArgs = await this.parseArgs(unsplittedArgs, command.parsers);
 
@@ -84,11 +82,20 @@ export class CommandHandler {
         return result as T;
     }
 
-    public getCommand(name: string) {
-        name = name.toLowerCase();
+    public getCommand(commandBody: string, commands: CommandsMap = this.commands): [Command, string] | null {
+        const name = commandBody.split(" ")[0].toLowerCase();
+        const rest = commandBody.substring(name.length + 1);
 
-        for (const cmdEntry of this.commands) {
-            if (cmdEntry[0].includes(name) || cmdEntry[0].map(unpolish).includes(name)) return cmdEntry[1];
+        for (const cmdEntry of commands) {
+            const [names, command] = cmdEntry;
+            if (names.includes(name) || names.map(unpolish).includes(name)) {
+                if (command instanceof Array) {
+                    return this.getCommand(rest, command);
+                }
+                else {
+                    return [command, rest];
+                }
+            }
         }
 
         return null;

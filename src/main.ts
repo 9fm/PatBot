@@ -14,7 +14,6 @@ import { executeCommand } from "./commands/execute";
 import { commandListCommand } from "./commands/commandList";
 import { setEnabledModuleCommand, getConfigOverridesCommand, listModulesCommand, setConfigOverridesCommand } from "./commands/module";
 import { leakCodeCommand } from "./commands/leakCode";
-import { groupCommand } from "./commands/groupCommand";
 
 dotenv.config();
 
@@ -38,15 +37,15 @@ bot.commandHandler.commands = [
     [["komendy", "listakomend"], commandListCommand],
     [["corobi", "zleakujkod"], leakCodeCommand],
 
-    [["moduły"], groupCommand(
+    [["moduły"], [
         [["lista"], listModulesCommand],
         [["włącz"], setEnabledModuleCommand(true)],
         [["wyłącz"], setEnabledModuleCommand(false)],
-        [["config", "konfig"], groupCommand(
+        [["config", "konfig"], [
             [["ustaw"], setConfigOverridesCommand],
             [["pokaż"], getConfigOverridesCommand],
-        )]
-    )],
+        ]]
+    ]],
 ];
 
 if (process.env.BOT_OWNER_ID) bot.commandHandler.addCommand(["wykonaj"], executeCommand(process.env.BOT_OWNER_ID as string));
