@@ -1,4 +1,5 @@
 import { CommandBuilder, restOfTheLineParser } from "../command";
+import { Script } from "vm";
 
 export function executeCommand(ownerId: string) {
     return new CommandBuilder()
@@ -7,7 +8,10 @@ export function executeCommand(ownerId: string) {
             if (ctx.message.author.id != ownerId) return void ctx.message.reply("Tylko właściciel bota może użyć takiej potężnej komendy");
 
             try {
-                const result = eval(code);
+                const result = new Script(code).runInNewContext({
+                    ctx,
+                    CommandBuilder
+                });
                 ctx.message.reply((result ?? "Wykonane").toString());
             }
             catch (err) {
