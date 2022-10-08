@@ -7,9 +7,7 @@ export interface CommandContext {
     readonly bot: Bot;
 
     readonly message: Message;
-    /**
-     * @deprecated
-     */
+
     readonly unsplittedArgs: string;
 }
 
@@ -37,7 +35,7 @@ export interface Command<T extends any[] = any> {
     readonly args: string[];
     readonly parsers: ParserList<T>;
     readonly permissions: PermissionString[];
-    readonly execute: (ctx: CommandContext, ...args: T) => void;
+    readonly execute: (ctx: CommandContext, ...args: T) => Awaitable<void>;
 }
 
 export class CommandBuilder<T extends any[] = []> {
@@ -60,7 +58,7 @@ export class CommandBuilder<T extends any[] = []> {
         return this;
     }
 
-    executes(func: (ctx: CommandContext, ...args: T) => void): Command<T> {
+    executes(func: (ctx: CommandContext, ...args: T) => Awaitable<void>): Command<T> {
         return {
             args: this.args,
             parsers: this.parsers,

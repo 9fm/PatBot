@@ -67,37 +67,37 @@ export class Bot {
 
     private registerCallbacks() {
         this.client.on("messageCreate", async (message) => {
-            if (message.author.bot) return;
-            if (message.channel.type != "GUILD_TEXT") return;
+            try {
+                if (message.author.bot) return;
+                if (message.channel.type != "GUILD_TEXT") return;
 
-            const content = message.content.toLowerCase();
+                const content = message.content.toLowerCase();
 
-            const prefixes = [this.prefix, `<@${this.client.user!.id}> `, `<@!${this.client.user!.id}> `];
+                const prefixes = [this.prefix, `<@${this.client.user!.id}> `, `<@!${this.client.user!.id}> `];
 
-            if (prefixes.some((prefix) => content == prefix.trimEnd())) {
-                message.reply("czego");
-                return;
-            }
+                if (prefixes.some((prefix) => content == prefix.trimEnd())) {
+                    message.reply("czego");
+                    return;
+                }
 
-            const prefix = prefixes.find((prefix) => content.startsWith(prefix))
-            if (prefix) {
-                try {
+                const prefix = prefixes.find((prefix) => content.startsWith(prefix))
+                if (prefix) {
                     const result = await this.commandHandler.handleCommand(this, message, message.content.slice(prefix.length));
                     if (result != null) message.reply(result);
-                } catch (exception) {
-                    const embed = new Discord.MessageEmbed()
-                        .setTitle("Błąd")
-                        .setDescription("Coś wybuchło :c")
-                        .setColor(error);
-
-                    message.channel.send({ embeds: [embed] });
-
-                    console.error(exception);
+                    return;
                 }
-                return;
-            }
 
-            this.onAllEnabledModules(message.guild!, (m) => m.onMessageSent?.(this, message).catch((exception) => console.error(exception)));
+                this.onAllEnabledModules(message.guild!, (m) => m.onMessageSent?.(this, message).catch((exception) => console.error(exception)));
+            } catch (exception) {
+                const embed = new Discord.MessageEmbed()
+                    .setTitle("Błąd")
+                    .setDescription("Coś wybuchło :c")
+                    .setColor(error);
+
+                message.channel.send({ embeds: [embed] });
+
+                console.error(exception);
+            }
         });
     }
 

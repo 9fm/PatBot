@@ -13,9 +13,6 @@ export class CommandHandler {
     }
 
     public async handleCommand(bot: Bot, message: Message, commandBody: string): Promise<string | null> {
-        // const commandName = splittedCommand[0];
-        // if (!commandName) return "aha nawet nie wpisałeś komendy";
-
         const [command, unsplittedArgs] = this.getCommand(commandBody) ?? [null, null];
 
         if (!command) {
@@ -32,7 +29,7 @@ export class CommandHandler {
             return parsedArgs.error;
         }
 
-        command.execute({ bot, message, unsplittedArgs }, ...parsedArgs);
+        await command.execute({ bot, message, unsplittedArgs }, ...parsedArgs);
 
         return null;
     }
