@@ -4,6 +4,7 @@ import { CommandBuilder, restOfTheLineParser } from "../command";
 
 export const sayCommand = new CommandBuilder()
     .withArg("coś", restOfTheLineParser)
+    .withDescription("Daje ci możliwość wkładania słów w usta Pata")
     .executes(async (ctx, cos) => {
         const embed = new EmbedBuilder()
             .setTitle(cos ? `${ctx.message.author.username} kazał mi to powiedzieć` : `${ctx.message.author.username} kazał mi nic nie mówić`)

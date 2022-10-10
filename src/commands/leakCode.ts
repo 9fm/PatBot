@@ -2,6 +2,7 @@ import { CommandBuilder, stringParser } from "../command";
 
 export const leakCodeCommand = new CommandBuilder()
     .withArg("komenda", stringParser)
+    .withDescription("Najbardziej user-friendly komenda do sprawdzania co robi jakaś komenda :thumbsup:")
     .executes(({ bot, message }, command) => {
         const [cmd, _] = bot.commandHandler.getCommand(command) ?? [null, null];
         if (!cmd) return void message.reply("Ta komenda nie istnieje");

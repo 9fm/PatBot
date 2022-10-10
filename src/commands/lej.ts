@@ -5,6 +5,7 @@ import { random } from "../util/random";
 
 export const lejCommand = new CommandBuilder()
     .withArg("użytkownik", userParser)
+    .withDescription("Sprawdza jak bardzo ktoś jest lejem")
     .executes(async (ctx, user) => {
         const r = getLejostwo(user);
 

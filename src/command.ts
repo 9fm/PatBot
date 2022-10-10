@@ -34,6 +34,7 @@ export type ParserList<T extends any[]> = { [P in keyof T]: ArgParser<T[P]> };
 export interface Command<T extends any[] = any> {
     readonly args: string[];
     readonly parsers: ParserList<T>;
+    readonly description: string | null;
     readonly permissions: PermissionResolvable;
     readonly execute: (ctx: CommandContext, ...args: T) => Awaitable<void>;
 }
@@ -43,6 +44,7 @@ export class CommandBuilder<T extends any[] = []> {
     private readonly parsers: ParserList<T>;
 
     private permissions: PermissionResolvable = [];
+    private description: string | null = null;
 
     constructor(args: string[] = [], parsers: ParserList<T> = [] as any) {
         this.args = args;
@@ -50,7 +52,14 @@ export class CommandBuilder<T extends any[] = []> {
     }
 
     withArg<A>(name: string, parser: ArgParser<A>): CommandBuilder<[...T, A]> {
-        return new CommandBuilder<[...T, A]>([...this.args, name], [...this.parsers as any, parser] as any);
+        this.args.push(name);
+        this.parsers.push(parser);
+        return this as unknown as CommandBuilder<[...T, A]>;
+    }
+
+    withDescription(description: string): this {
+        this.description = description;
+        return this;
     }
 
     requires(permissions: PermissionResolvable): this {
@@ -62,6 +71,7 @@ export class CommandBuilder<T extends any[] = []> {
         return {
             args: this.args,
             parsers: this.parsers,
+            description: this.description,
             permissions: this.permissions,
             execute: func
         };

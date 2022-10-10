@@ -7,6 +7,7 @@ import { random } from "../util/random";
 export function progressBarCommand(progressMessage: string, finishedMessage: string, failedMessage: string) {
     return new CommandBuilder()
         .withArg("coś", restOfTheLineParser)
+        .withDescription("Wyświetla epicki paseczek progresu który nic nie robi :thumbsup:")
         .executes(async (ctx, text) => {
             const embed = new EmbedBuilder()
                 .setTitle(progressMessage.replaceAll("{text}", text))
