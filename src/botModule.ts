@@ -1,10 +1,10 @@
-import { Awaitable, ClientEvents, Message, PermissionString } from "discord.js";
+import { Awaitable, ClientEvents, Message, PermissionResolvable } from "discord.js";
 import { Bot } from "./bot";
 
 export interface BotModule<C extends Record<string, any>> {
     defaultEnabled: boolean
     description: string
-    requiredPermissions: PermissionString[]
+    requiredPermissions: PermissionResolvable
     defaultConfig?: C
 
     onMessageSent?(bot: Bot, message: Message): Promise<void>

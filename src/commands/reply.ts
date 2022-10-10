@@ -7,9 +7,9 @@ export function replyCommand(replyMessage: string) {
 }
 
 export function randomReplyCommand(replyMessages: string[], allowArgs: boolean) {
-    const builder = new CommandBuilder();
+    let builder: CommandBuilder<any> = new CommandBuilder();
 
-    if (allowArgs) builder.withArg("cokolwiek", restOfTheLineParser);
+    if (allowArgs) builder = builder.withArg("cokolwiek", restOfTheLineParser);
 
     return builder.executes((ctx) => void ctx.message.reply(random.element(replyMessages)));
 }

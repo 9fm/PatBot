@@ -1,11 +1,11 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import { getColor } from "../colors";
 import { CommandBuilder, restOfTheLineParser } from "../command";
 
 export const sayCommand = new CommandBuilder()
     .withArg("coś", restOfTheLineParser)
     .executes(async (ctx, cos) => {
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle(cos ? `${ctx.message.author.username} kazał mi to powiedzieć` : `${ctx.message.author.username} kazał mi nic nie mówić`)
             .setAuthor({
                 name: ctx.message.author.username + "#" + ctx.message.author.discriminator,

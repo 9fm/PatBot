@@ -3,6 +3,7 @@ import { BotModule } from "./botModule";
 import { CommandHandler } from "./commandHandler";
 import { connect, model, Schema } from "mongoose";
 import { error } from "./colors";
+import { ChannelType } from "discord.js";
 
 export interface GuildModuleSettings {
     readonly moduleId: string;
@@ -40,7 +41,7 @@ export class Bot {
     public readonly modules: ReadonlyMap<string, BotModule<any>>;
 
     public constructor(prefix: string, modules: { [key: string]: BotModule<any> }) {
-        this.client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES, Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
+        this.client = new Discord.Client({ intents: ["Guilds", "GuildMessages", "GuildMessageReactions", "MessageContent"] });
         this.prefix = prefix;
         this.modules = new Map(Object.entries(modules));
 
@@ -69,7 +70,7 @@ export class Bot {
         this.client.on("messageCreate", async (message) => {
             try {
                 if (message.author.bot) return;
-                if (message.channel.type != "GUILD_TEXT") return;
+                if (message.channel.type != ChannelType.GuildText) return;
 
                 const content = message.content.toLowerCase();
 
@@ -89,7 +90,7 @@ export class Bot {
 
                 this.onAllEnabledModules(message.guild!, (m) => m.onMessageSent?.(this, message).catch((exception) => console.error(exception)));
             } catch (exception) {
-                const embed = new Discord.MessageEmbed()
+                const embed = new Discord.EmbedBuilder()
                     .setTitle("Błąd")
                     .setDescription("Coś wybuchło :c")
                     .setColor(error);
@@ -135,7 +136,7 @@ export class Bot {
         return {};
     }
 
-    public async getConfig<C>(guild: Discord.Guild, module: string | BotModule<C>) {
+    public async getConfig<C extends Record<string, any>>(guild: Discord.Guild, module: string | BotModule<C>) {
         const moduleId = typeof module == "string" ? module : [...this.modules].find(([key, val]) => val == module)![0];
         const moduleObj = typeof module == "string" ? this.modules.get(moduleId) : module;
 

@@ -1,4 +1,4 @@
-import { MessageEmbed, User } from "discord.js";
+import { EmbedBuilder, User } from "discord.js";
 import { getColor } from "../colors";
 import { CommandBuilder, userParser } from "../command";
 import { random } from "../util/random";
@@ -10,7 +10,7 @@ export const lejCommand = new CommandBuilder()
 
         const description = `<@${user.id}> jest w ${r}% lejem`;
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle("Lejometr")
             .setColor(getColor())
             .setDescription(description);

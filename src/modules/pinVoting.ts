@@ -4,7 +4,7 @@ import { BotModule } from "../botModule";
 export const pinVoting: BotModule<{ votesRequired: number }> = {
     defaultEnabled: false,
     description: "Automatycznie przypina wiadomości z wystarczająca liczbą reakcji :pushpin:",
-    requiredPermissions: ["MANAGE_MESSAGES"],
+    requiredPermissions: ["ManageMessages"],
     defaultConfig: {
         votesRequired: 3
     },
@@ -20,7 +20,7 @@ export const pinVoting: BotModule<{ votesRequired: number }> = {
 
                 const reactions = (await reaction.users.fetch())
                     .filter(user => !user.bot)
-                    .filter(user => channel.guild.members.cache.get(user.id)!.permissionsIn(channel).has("SEND_MESSAGES"));
+                    .filter(user => channel.guild.members.cache.get(user.id)!.permissionsIn(channel).has("SendMessages"));
 
                 if (reactions.size >= config.votesRequired) {
                     await message.pin();

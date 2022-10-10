@@ -1,4 +1,4 @@
-import { Awaitable, Client, Message, PermissionString, User } from "discord.js";
+import { Awaitable, Message, PermissionResolvable, User } from "discord.js";
 import { Bot } from "./bot";
 import { bot } from "./main";
 import { getUserFromMention } from "./util/discord";
@@ -34,7 +34,7 @@ export type ParserList<T extends any[]> = { [P in keyof T]: ArgParser<T[P]> };
 export interface Command<T extends any[] = any> {
     readonly args: string[];
     readonly parsers: ParserList<T>;
-    readonly permissions: PermissionString[];
+    readonly permissions: PermissionResolvable;
     readonly execute: (ctx: CommandContext, ...args: T) => Awaitable<void>;
 }
 
@@ -42,7 +42,7 @@ export class CommandBuilder<T extends any[] = []> {
     private readonly args: string[] = [];
     private readonly parsers: ParserList<T>;
 
-    private permissions: PermissionString[] = [];
+    private permissions: PermissionResolvable = [];
 
     constructor(args: string[] = [], parsers: ParserList<T> = [] as any) {
         this.args = args;
@@ -53,7 +53,7 @@ export class CommandBuilder<T extends any[] = []> {
         return new CommandBuilder<[...T, A]>([...this.args, name], [...this.parsers as any, parser] as any);
     }
 
-    requires(...permissions: PermissionString[]): this {
+    requires(permissions: PermissionResolvable): this {
         this.permissions = permissions;
         return this;
     }

@@ -23,7 +23,7 @@ function includesBadWords(content: string, badWordMap: Record<string, string>) {
 export const badWordReplacer: BotModule<{ useGlobalBadWordMap: boolean, customBadWordMap: Record<string, string> }> = {
     defaultEnabled: true,
     description: "Zamienia brzydkie słowa na ładne w wiadomościach (np. chuj -> siusiak)",
-    requiredPermissions: ["MANAGE_WEBHOOKS", "MANAGE_MESSAGES"],
+    requiredPermissions: ["ManageWebhooks", "ManageMessages"],
     defaultConfig: {
         useGlobalBadWordMap: true,
         customBadWordMap: {}
@@ -44,7 +44,7 @@ export const badWordReplacer: BotModule<{ useGlobalBadWordMap: boolean, customBa
 
             const channel = message.channel as TextChannel;
 
-            const hook = (await channel.fetchWebhooks()).find((webhook) => webhook.name == "Pathook") ?? await channel.createWebhook("Pathook", { reason: "Webhook stworzony przez pat bota do usuwania brzydkich słów z wiadomości" });
+            const hook = (await channel.fetchWebhooks()).find((webhook) => webhook.name == "Pathook") ?? await channel.createWebhook({ name: "Pathook", reason: "Webhook stworzony przez pat bota do usuwania brzydkich słów z wiadomości" });
             await hook.send({ username: message.author.username, avatarURL: message.author.avatarURL() ?? undefined, content: contentWithoutBadWords })
             await message.delete();
         }

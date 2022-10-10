@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import { error, getColor } from "../colors";
 import { CommandBuilder, CommandContext, restOfTheLineParser } from "../command";
 import { delay } from "../util/misc";
@@ -8,7 +8,7 @@ export function progressBarCommand(progressMessage: string, finishedMessage: str
     return new CommandBuilder()
         .withArg("coś", restOfTheLineParser)
         .executes(async (ctx, text) => {
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setTitle(progressMessage.replaceAll("{text}", text))
                 .setColor(getColor())
                 .setDescription("");
@@ -29,7 +29,7 @@ export function progressBarCommand(progressMessage: string, finishedMessage: str
 
             const failed = random.chance(0.1);
 
-            const resultEmbed = new MessageEmbed()
+            const resultEmbed = new EmbedBuilder()
                 .setTitle(!failed ? finishedMessage.replaceAll("{text}", text) : failedMessage.replaceAll("{text}", text))
                 .setColor(!failed ? getColor() : error)
                 .setDescription("");

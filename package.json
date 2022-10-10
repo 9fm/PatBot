@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/Ketok4321/PatBot#readme",
   "dependencies": {
-    "discord.js": "^13.3.1",
+    "discord.js": "^14.5.0",
     "dotenv": "^16.0.0",
     "moment": "^2.29.2",
     "mongoose": "^6.2.10"

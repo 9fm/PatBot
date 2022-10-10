@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import { CommandBuilder, moduleParser, restOfTheLineParser } from "../command";
 import { getColor } from "../colors";
 import { Bot, GuildData, GuildModuleSettings } from "../bot";
@@ -14,7 +14,7 @@ function getModuleSettings(bot: Bot, guildData: GuildData, moduleId: string): [G
 export function setEnabledModuleCommand(enabled: boolean) {
     return new CommandBuilder()
         .withArg("moduleId", moduleParser)
-        .requires("MANAGE_GUILD")
+        .requires("ManageGuild")
         .executes(async ({ bot, message }, moduleId) => {
             const guildData = await bot.getGuildData(message.guild!);
 
@@ -27,14 +27,22 @@ export function setEnabledModuleCommand(enabled: boolean) {
 
 export const listModulesCommand = new CommandBuilder()
     .executes(async ({ bot, message }) => {
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle("Moduły pata")
             .setColor(getColor());
 
+        const fields = [];
+
         for (const [moduleId, module] of bot.modules) {
             const status = await bot.isModuleEnabled(message.guild!, moduleId) ? (bot.hasModulePermissions(message.guild!, moduleId) ? "wlonczony" : "brakuje permisji") : "wylonczony";
-            embed.addField(moduleId + ": " + status, module.description);
+
+            fields.push({
+                name: moduleId + ": " + status,
+                value: module.description,
+            });
         }
+
+        embed.addFields(fields);
 
         await message.reply({ embeds: [embed] });
     });
@@ -42,7 +50,7 @@ export const listModulesCommand = new CommandBuilder()
 export const setConfigOverridesCommand = new CommandBuilder()
     .withArg("moduleId", moduleParser)
     .withArg("config", restOfTheLineParser)
-    .requires("MANAGE_GUILD")
+    .requires("ManageGuild")
     .executes(async ({ bot, message }, moduleId, configStr) => {
         const configOverrides = JSON.parse(configStr);
 
@@ -59,7 +67,7 @@ export const setConfigOverridesCommand = new CommandBuilder()
 
 export const getConfigOverridesCommand = new CommandBuilder()
     .withArg("moduleId", moduleParser)
-    .requires("MANAGE_GUILD")
+    .requires("ManageGuild")
     .executes(async ({ bot, message }, moduleId) => {
         const guildData = await bot.getGuildData(message.guild!);
         const [moduleSettings] = getModuleSettings(bot, guildData, moduleId);
