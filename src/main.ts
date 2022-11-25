@@ -12,7 +12,7 @@ import { sayCommand } from "./commands/say";
 import { progressBarCommand } from "./commands/progressBar";
 import { executeCommand } from "./commands/execute";
 import { commandListCommand } from "./commands/commandList";
-import { setEnabledModuleCommand, getConfigOverridesCommand, listModulesCommand, setConfigOverridesCommand } from "./commands/module";
+import { setEnabledModuleCommand, getConfigOverridesCommand, listModulesCommand, setConfigOverridesCommand, getDefaultConfigCommand } from "./commands/module";
 import { leakCodeCommand } from "./commands/leakCode";
 
 dotenv.config();
@@ -41,10 +41,12 @@ bot.commandHandler.commands = [
         [["lista"], listModulesCommand],
         [["włącz"], setEnabledModuleCommand(true)],
         [["wyłącz"], setEnabledModuleCommand(false)],
-        [["config", "konfig"], [
-            [["ustaw"], setConfigOverridesCommand],
-            [["pokaż"], getConfigOverridesCommand],
-        ]]
+    ]],
+
+    [["config", "konfig"], [
+        [["ustaw"], setConfigOverridesCommand],
+        [["pokaż"], getConfigOverridesCommand],
+        [["default"], getDefaultConfigCommand],
     ]],
 ];
 

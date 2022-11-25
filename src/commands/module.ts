@@ -1,4 +1,4 @@
-import { EmbedBuilder } from "discord.js";
+import { EmbedBuilder, Message } from "discord.js";
 import { CommandBuilder, moduleParser, restOfTheLineParser } from "../command";
 import { getColor } from "../colors";
 import { Bot, GuildData, GuildModuleSettings } from "../bot";
@@ -9,6 +9,10 @@ function getModuleSettings(bot: Bot, guildData: GuildData, moduleId: string): [G
         index = guildData.modules.push({ moduleId, enabled: bot.modules.get(moduleId)!.defaultEnabled, configOverrides: {} }) - 1;
     }
     return [guildData.modules[index]!, index];
+}
+
+function replyJson(message: Message, object: any) {
+    return message.reply("```json\n" + JSON.stringify(object, undefined, "    ") + "```");
 }
 
 export function setEnabledModuleCommand(enabled: boolean) {
@@ -72,5 +76,14 @@ export const getConfigOverridesCommand = new CommandBuilder()
         const guildData = await bot.getGuildData(message.guild!);
         const [moduleSettings] = getModuleSettings(bot, guildData, moduleId);
 
-        await message.reply("```json\n" + JSON.stringify(moduleSettings.configOverrides) + "```");
+        await replyJson(message, moduleSettings.configOverrides);
+    });
+
+export const getDefaultConfigCommand = new CommandBuilder()
+    .withArg("moduleId", moduleParser)
+    .requires("ManageGuild")
+    .executes(async ({ bot, message }, moduleId) => {
+        const module = bot.modules.get(moduleId)!;
+
+        await replyJson(message, module.defaultConfig);
     });
