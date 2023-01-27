@@ -12,7 +12,6 @@ export function progressBarCommand(progressMessage: string, finishedMessage: str
             const embed = new EmbedBuilder()
                 .setTitle(progressMessage.replaceAll("{text}", text))
                 .setColor(getColor())
-                .setDescription("");
 
             let percentage = 0
 
@@ -33,7 +32,6 @@ export function progressBarCommand(progressMessage: string, finishedMessage: str
             const resultEmbed = new EmbedBuilder()
                 .setTitle(!failed ? finishedMessage.replaceAll("{text}", text) : failedMessage.replaceAll("{text}", text))
                 .setColor(!failed ? getColor() : error)
-                .setDescription("");
 
             await ctx.message.reply({ embeds: [resultEmbed] });
         });
