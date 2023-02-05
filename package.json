@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "Discord bot for my discord server",
   "scripts": {
-    "start": "ts-node src/main.ts"
+    "build": "tsc -p .",
+    "dev": "ts-node src/main.ts"
   },
   "repository": {
     "type": "git",
