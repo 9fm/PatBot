@@ -2,6 +2,8 @@ import * as dotenv from "dotenv";
 
 import { Bot } from "./bot";
 
+import { range } from "./util/misc";
+
 import { badWordReplacer } from "./modules/badWordReplacer";
 import { pinVoting } from "./modules/pinVoting";
 
@@ -27,6 +29,7 @@ bot.commandHandler.commands = [
     [["ring", "ping"], pingCommand("Bing!")],
     [["kiedy", "<:kiedy:741288559604138005>"], randomReplyCommand([":jutro:", ":nigdy:"], true)],
     [["czy", "<:czy:767692365439565844>"], randomReplyCommand(["tak", "nie"], true)],
+    [["ile"], randomReplyCommand([...range(0, 100).map(String), ...range(-10, 0).map(String), ...range(1, 20).map(s => s + " pierdylionów"), ...range(1, 20).map(s => s + " sekstylionów"), "dużo", "mało", "tak", "∞", "√2", "π"], true)],
 
     [["lej", "lejometr"], lejCommand],
     [["powiedz"], sayCommand],
