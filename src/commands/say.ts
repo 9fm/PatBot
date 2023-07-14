@@ -9,7 +9,7 @@ export const sayCommand = new CommandBuilder()
         const embed = new EmbedBuilder()
             .setTitle(cos ? `${ctx.message.author.username} kazał mi to powiedzieć` : `${ctx.message.author.username} kazał mi nic nie mówić`)
             .setAuthor({
-                name: ctx.message.author.username + "#" + ctx.message.author.discriminator,
+                name: ctx.message.author.tag,
                 iconURL: ctx.message.author.avatarURL() ?? undefined
             })
             .setColor(getColor())
