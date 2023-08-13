@@ -67,6 +67,10 @@ export class Bot {
     }
 
     private registerCallbacks() {
+        this.client.on("ready", async () => {
+            await this.client.user!.setActivity({ name: `${this.prefix}info`, type: Discord.ActivityType.Listening });
+        });
+
         this.client.on("messageCreate", async (message) => {
             try {
                 if (message.author.bot) return;

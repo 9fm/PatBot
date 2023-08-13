@@ -16,12 +16,15 @@ import { executeCommand } from "./commands/execute";
 import { commandListCommand } from "./commands/commandList";
 import { setEnabledModuleCommand, getConfigOverridesCommand, listModulesCommand, setConfigOverridesCommand, getDefaultConfigCommand } from "./commands/module";
 import { leakCodeCommand } from "./commands/leakCode";
+import { botInfoCommand } from "./commands/info";
 
 dotenv.config();
 
 export const bot = new Bot(process.env.PREFIX as string, { badWordReplacer, pinVoting });
 
 bot.commandHandler.commands = [
+    [["info", "botinfo"], botInfoCommand],
+
     [["pomocy", "pomoc", "help"], replyCommand(`nie pomogę ci :c\n(ale możesz użyć \`${bot.prefix}komendy\` żeby zobaczyć listę komend)`)],
 
     [["żyjesz", "żyjesz?", "działasz", "działasz?"], replyCommand("tak")],
