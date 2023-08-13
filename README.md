@@ -1,5 +1,6 @@
 # Pat Bot
-Bot co robi wszystko i nic
+Bot co robi wszystko i nic.
+
 Jak na razie prace nad nim są praktycznie wstrzymane, od czasu do czasu naprawie w nim jakiś błąd czy coś i w zasadzie to tyle
 
 ## Zaproszenie
