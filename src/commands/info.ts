@@ -25,7 +25,7 @@ export const botInfoCommand: Command = new CommandBuilder()
                 },
                 {
                     name: "Mój pan i władca:",
-                    value: `<@${process.env.BOT_OWNER_ID!}>`,
+                    value: process.env.BOT_OWNER_ID ? `<@${process.env.BOT_OWNER_ID}>` : "DJ Płodny",
                     inline: true,
                 },
                 {
