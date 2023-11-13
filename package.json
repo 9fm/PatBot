@@ -23,6 +23,6 @@
     "mongoose": "^6.2.10"
   },
   "devDependencies": {
-    "@tsconfig/node16": "^1.0.2"
+    "@tsconfig/node18": "^18.2.2"
   }
 }
