@@ -1,7 +1,7 @@
 import * as Discord from "discord.js";
 import { BotModule } from "./botModule";
 import { CommandHandler } from "./commandHandler";
-import { connect, model, Schema } from "mongoose";
+import { connect, model, Schema, set } from "mongoose";
 import { error } from "./colors";
 import { ChannelType } from "discord.js";
 
@@ -154,6 +154,7 @@ export class Bot {
         console.log("Starting bot...");
 
         console.log("Connecting to database...");
+        set("strictQuery", true);
         connect(process.env.DB_CONN_STRING!);
 
         console.log("Logging in...");
