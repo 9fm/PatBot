@@ -10,4 +10,4 @@ COPY src src
 
 RUN npm run build
 
-CMD [ "node", "--env-file=.env", "dist/main.js" ]
+CMD [ "node", "dist/main.js" ]
