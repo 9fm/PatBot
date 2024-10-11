@@ -15,5 +15,5 @@ export const sayCommand = new CommandBuilder()
             .setColor(getColor())
             .setDescription(cos);
 
-        await ctx.message.channel.send({ embeds: [embed] });
+        await ctx.message.reply({ embeds: [embed] });
     });

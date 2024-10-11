@@ -54,7 +54,7 @@ export const badWordReplacer: BotModule<{ useGlobalBadWordMap: boolean, customBa
         async messageUpdate(bot, oldMessage, newMessage) {
             if (includesBadWords(newMessage.content!, await getBadWordMap(bot, oldMessage.guild!))) {
                 newMessage.delete();
-                newMessage.channel.send(`<@${newMessage.author!.id}> pat wszystko widzi`);
+                if ("send" in newMessage.channel) newMessage.channel.send(`<@${newMessage.author!.id}> pat wszystko widzi`); // Kinda hacky but at least it compiles
             }
         }
     }

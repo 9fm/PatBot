@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "description": "Discord bot for my discord server",
   "scripts": {
-    "build": "tsc -p .",
-    "dev": "ts-node src/main.ts"
+    "build": "tsc",
+    "dev": "tsx --env-file=.env src/main.ts"
   },
   "repository": {
     "type": "git",
@@ -18,11 +18,12 @@
   "homepage": "https://github.com/Ketok4321/PatBot#readme",
   "dependencies": {
     "discord.js": "^14.12.1",
-    "dotenv": "^16.0.0",
     "moment": "^2.29.2",
     "mongoose": "^6.2.10"
   },
   "devDependencies": {
-    "@tsconfig/recommended": "^1.0.6"
+    "@tsconfig/recommended": "^1.0.6",
+    "typescript": "^5.6.3",
+    "tsx": "^4.19.1"
   }
 }

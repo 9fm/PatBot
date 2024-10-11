@@ -1,5 +1,3 @@
-import * as dotenv from "dotenv";
-
 import { Bot } from "./bot";
 
 import { range } from "./util/misc";
@@ -17,8 +15,6 @@ import { commandListCommand } from "./commands/commandList";
 import { setEnabledModuleCommand, getConfigOverridesCommand, listModulesCommand, setConfigOverridesCommand, getDefaultConfigCommand } from "./commands/module";
 import { leakCodeCommand } from "./commands/leakCode";
 import { botInfoCommand } from "./commands/info";
-
-dotenv.config();
 
 export const bot = new Bot(process.env.PREFIX as string, { badWordReplacer, pinVoting });
 
