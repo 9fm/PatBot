@@ -42,6 +42,11 @@ export const badWordReplacer: BotModule<{ useGlobalBadWordMap: boolean, customBa
                     contentWithoutBadWords = replaceWord(contentWithoutBadWords, unpolish(badWord), unpolish(goodWord as string));
                 });
 
+            // TODO: Fix other pings
+            contentWithoutBadWords = contentWithoutBadWords
+                .replaceAll("@everyone", "@każdyjeden")
+                .replaceAll("@here", "@tutaj");
+
             const channel = message.channel as TextChannel;
 
             const hook = (await channel.fetchWebhooks()).find((webhook) => webhook.name == "Pathook") ?? await channel.createWebhook({ name: "Pathook", reason: "Webhook stworzony przez pat bota do usuwania brzydkich słów z wiadomości" });
