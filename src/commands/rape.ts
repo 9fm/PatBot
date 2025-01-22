@@ -1,8 +1,6 @@
 import { EmbedBuilder, User } from "discord.js";
 import { getColor } from "../colors";
 import { CommandBuilder, userParser } from "../command";
-import { random } from "../util/random";
-
 export const rapeCommand = new CommandBuilder()
     .withArg("użytkownik", userParser)
     .withDescription("Gwałci użytkownika")
